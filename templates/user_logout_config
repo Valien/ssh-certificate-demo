@@ -1,0 +1,3 @@
+history -c
+/bin/rm -f /opt/remote/.history
+/bin/rm -f /ope/remote/.bash_history
