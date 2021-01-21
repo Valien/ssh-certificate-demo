@@ -45,7 +45,7 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
 1. Git clone this repo via HTTPS, SSH, or GH CLI.
 2. Open a terminal and `cd` into the main folder.
 3. Run `docker-compose build --build-arg=<PASSWORD>` - this will take a few minutes to build out the 2 containers. Use the `--build-arg` to input a user password at build time. It can be anything.
-4. After build completes run `docker-compose up -d` to start the containers and run them in the background. You can run a `docker ps` to see that they are running.
+4. After build completes run `docker-compose up -d` to start the containers and run them in the background. You can run a `docker ps` or `docker-compose ps` to see that they are running.
 5. Run `chmod +x copy_keys.sh` to make the shell script executable (needed for next step)
 6. Run `./copy_keys.sh` - this will copy the certs and pub keys from both the Bastion and App nodes. This will also create a `config` file for your SSH session in the `/tmp/ssh_files` folder. See the details in the `copy_keys.sh` file.
 7. Run `ssh -F /tmp/ssh_files/config -J bastion-node app-node` after a few seconds your terminal should drop into the `app_node`. You can also run `ssh -F /tmp/ssh_files/config app-node` as it will automatically ProxyJump you through the `bastion-node`.

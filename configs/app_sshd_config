@@ -138,5 +138,6 @@ PrintMotd yes
 #	ForceCommand cvs server
 
 # Limiting who can ssh into the host
-AllowUsers bastion appuser
+#AllowUsers appuser@172.21.20.10 appuser
+AllowUsers appuser
 DenyUsers root

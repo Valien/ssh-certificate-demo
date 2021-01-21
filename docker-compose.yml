@@ -20,8 +20,8 @@ services:
       args:
         - PASSWORD
     hostname: app-node
-    ports:
-      - 2223:2223
+    expose:
+      - 2223
     networks: 
       public:
         ipv4_address: 172.21.10.11 # setting static IP to simplify the POC
@@ -32,4 +32,3 @@ networks:
       driver: default
       config:
         - subnet: 172.21.10.0/24
-          gateway: 172.21.10.1
