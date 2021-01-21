@@ -9,13 +9,22 @@ COPY configs/app_motd /etc/motd
 # the below helps lock down the app-node by only allowing SSH from the bastion-node
 COPY configs/hosts.allow /etc
 COPY configs/hosts.deny /etc
+#COPY configs/app_issue /etc/issue
 
 RUN set -xe \
     && apk update \
     && apk upgrade \
     && apk add --no-cache openssh \
     && rm -rf /tmp/* /var/cache/apk/* \
-    && /usr/bin/ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+    # host CA & user CA generation
+    && ssh-keygen -t ed25519 -f /etc/ssh/app_host_ca -C app_host_ca \
+    && ssh-keygen -t ed25519 -f /etc/ssh/app_user_ca -C app_user_ca \
+    # gen host key and sign it - will generate a ssh_host_ed25519_key-cert.pub file
+    && ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N '' \
+    && ssh-keygen -s /etc/ssh/app_host_ca -I app.example.com -h -n app.example.com,localhost,app,app-node -V +60d /etc/ssh/ssh_host_ed25519_key.pub \
+    # gen user key and sign it - will generate a user-key-cert.pub file
+    && ssh-keygen -t ed25519 -f /etc/ssh/app-user-key \
+    && ssh-keygen -s /etc/ssh/app_user_ca -I app -n appuser,bastion -V +30d /etc/ssh/app-user-key.pub
 
 # copying over customized sshd_config on build
 COPY configs/app_sshd_config /etc/ssh/sshd_config
@@ -34,10 +43,10 @@ WORKDIR /app_ssh
 
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} --disabled-password ${USER} \
-    && echo "${USER}:${PASSWORD}" | chpasswd \
-    && ssh-keygen -t ed25519 -f /etc/ssh/ca_key -C ca -N "" \
-    && ssh-keygen -t ed25519 -f ${USER} -C ${USER} -N "" \
-    && ssh-keygen -s /etc/ssh/ca_key -V +52w -n ${USER} -I ${USER}-key1 -z 1 ${USER}.pub
+    && echo "${USER}:${PASSWORD}" | chpasswd
+    # && ssh-keygen -t ed25519 -f /etc/ssh/ca_key -C ca -N "" \
+    # && ssh-keygen -t ed25519 -f ${USER} -C ${USER} -N "" \
+    # && ssh-keygen -s /etc/ssh/ca_key -V +52w -n ${USER} -I ${USER}-key1 -z 1 ${USER}.pub
     
 EXPOSE 2223
 

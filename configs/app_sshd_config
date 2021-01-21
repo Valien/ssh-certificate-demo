@@ -12,28 +12,41 @@
 
 Port 2223
 #AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress 127.0.0.1
 ListenAddress 172.21.10.11
-#ListenAddress ::
 
+# Supported HostKey algorithms
 #HostKey /etc/ssh/ssh_host_rsa_key
 #HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# These are taken from Mozilla's best practices on configuring OpenSSH
+# https://infosec.mozilla.org/guidelines/openssh.html
+
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 
 # Adding SSL Certificate Authentication
 # Path to CA public key
-TrustedUserCAKeys /etc/ssh/ca_key.pub
+TrustedUserCAKeys /etc/ssh/app_user_ca.pub
 
 # Path to host private key and Certificate
-HostKey /etc/ssh/ssh_host_ed25519_key
-#HostCertificate /etc/ssh/ssh_bastion_ed25519_key-cert.pub
+HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
 
 # Ciphers and keying
 #RekeyLimit default none
 
 # Logging
 SyslogFacility AUTH
-LogLevel INFO
+LogLevel VERBOSE
 
 # Authentication:
+
+AuthenticationMethods publickey
 
 #LoginGraceTime 2m
 #PermitRootLogin prohibit-password
@@ -89,7 +102,7 @@ PasswordAuthentication no
 # and ChallengeResponseAuthentication to 'no'.
 #UsePAM no
 
-AllowAgentForwarding yes
+AllowAgentForwarding no
 # Feel free to re-enable these if your use case requires them.
 AllowTcpForwarding yes
 GatewayPorts yes
@@ -112,7 +125,7 @@ PrintMotd yes
 #VersionAddendum none
 
 # no default banner path
-#Banner none
+#Banner /etc/issue
 
 # override default of no subsystems
 #Subsystem	sftp	/usr/lib/ssh/sftp-server
@@ -126,3 +139,4 @@ PrintMotd yes
 
 # Limiting who can ssh into the host
 AllowUsers bastion appuser
+DenyUsers root

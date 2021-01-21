@@ -12,28 +12,41 @@
 
 Port 2222
 #AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress 127.0.0.1
 ListenAddress 172.21.10.10
-#ListenAddress ::
 
+# Supported HostKey algorithms
 #HostKey /etc/ssh/ssh_host_rsa_key
 #HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# These are taken from Mozilla's best practices on configuring OpenSSH
+# https://infosec.mozilla.org/guidelines/openssh.html
+
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 
 # Adding SSL Certificate Authentication
 # Path to CA public key
-TrustedUserCAKeys /etc/ssh/ca_key.pub
+TrustedUserCAKeys /etc/ssh/bastion_user_ca.pub
 
 # Path to host private key and Certificate
-HostKey /etc/ssh/ssh_host_ed25519_key
-#HostCertificate /etc/ssh/ssh_bastion_ed25519_key-cert.pub
+HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
 
 # Ciphers and keying
 #RekeyLimit default none
 
 # Logging
 SyslogFacility AUTH
-LogLevel INFO
+LogLevel VERBOSE
 
 # Authentication:
+
+AuthenticationMethods publickey
 
 #LoginGraceTime 2m
 #PermitRootLogin prohibit-password
@@ -89,40 +102,42 @@ PasswordAuthentication no
 # and ChallengeResponseAuthentication to 'no'.
 #UsePAM no
 
-AllowAgentForwarding yes
+AllowAgentForwarding no
 # Feel free to re-enable these if your use case requires them.
 AllowTcpForwarding yes
-GatewayPorts yes
+GatewayPorts no
 X11Forwarding no
 #X11DisplayOffset 10
 #X11UseLocalhost yes
-#PermitTTY yes
+PermitTTY no
 PrintMotd yes
 #PrintLastLog yes
 #TCPKeepAlive yes
 #PermitUserEnvironment no
 #Compression delayed
-#ClientAliveInterval 0
-#ClientAliveCountMax 3
+ClientAliveInterval 600
+ClientAliveCountMax 3
 #UseDNS no
 #PidFile /run/sshd.pid
 #MaxStartups 10:30:100
-PermitTunnel yes
+PermitTunnel no
 #ChrootDirectory none
 #VersionAddendum none
 
 # no default banner path
-#Banner none
+# Banner /etc/issue
 
 # override default of no subsystems
 #Subsystem	sftp	/usr/lib/ssh/sftp-server
 
 # Example of overriding settings on a per-user basis
-#Match User anoncvs
-#	X11Forwarding no
-#	AllowTcpForwarding no
-#	PermitTTY no
-#	ForceCommand cvs server
+Match User bastion
+    PermitTTY no
+	X11Forwarding no
+    PermitTunnel no
+	GatewayPorts no
+    ForceCommand /sbin/nologin
 
 # Limiting who can ssh into the host
 AllowUsers bastion
+DenyUsers root

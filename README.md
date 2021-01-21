@@ -38,13 +38,12 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
 
 1. Git clone this repo via HTTPS, SSH, or GH CLI.
 2. Open a terminal and `cd` into the main folder.
-3. Run `docker-compose build` - this will take a few minutes to build out the 2 containers.
+3. Run `docker-compose build --build-arg=<PASSWORD>` - this will take a few minutes to build out the 2 containers. Use the `--build-arg` to input a user password at build time. It can be anything.
 4. After build completes run `docker-compose up -d` to start the containers and run them in the background. You can run a `docker ps` to see that they are running.
 5. Run `chmod +x copy_keys.sh` to make the shell script executable (needed for next step)
-6. Run `./copy_keys.sh` - this will copy the certs and pub keys from both the Bastion and App nodes. This will also append some ssh configs to your `~/.ssh/config` file. See the details in the `copy_keys.sh` file.
-7. Run `ssh -J bastion-node app-node` and if this is your first time connecting you will be prompted to accept the `ED25519 key fingerprint...` Go ahead and type in `yes`. You'll do this for the `bastion-node` and the `app-node`.
-8. If all succeeded and you are authenticated then you should be dropped into the `app-node` terminal. 
-9. Congrats! You have successfully connected to a docker container via a bastion host!
+6. Run `./copy_keys.sh` - this will copy the certs and pub keys from both the Bastion and App nodes. This will also create a `config` file for your SSH session in the `/tmp/ssh_files` folder. See the details in the `copy_keys.sh` file.
+7. Run `ssh -F /tmp/ssh_files/config -J bastion-node app-node` after a few seconds your terminal should drop into the `app_node`. You can also run `ssh -F /tmp/ssh_files/config app-node` as it will automatically ProxyJump you through the `bastion-node`.
+9. Congrats! You have successfully connected to a docker container via a bastion host leveraging SSL certificates!
 10. Type in `exit` to disconnect and `docker-compose down` to stop the running containers.
 
 ### TODO & ISSUES
