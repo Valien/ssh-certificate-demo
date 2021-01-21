@@ -30,7 +30,7 @@ Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.
 
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 
-# Adding SSL Certificate Authentication
+# Adding SSH Certificate Authentication
 # Path to CA public key
 TrustedUserCAKeys /etc/ssh/bastion_user_ca.pub
 

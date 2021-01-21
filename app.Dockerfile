@@ -44,9 +44,6 @@ WORKDIR /app_ssh
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} --disabled-password ${USER} \
     && echo "${USER}:${PASSWORD}" | chpasswd
-    # && ssh-keygen -t ed25519 -f /etc/ssh/ca_key -C ca -N "" \
-    # && ssh-keygen -t ed25519 -f ${USER} -C ${USER} -N "" \
-    # && ssh-keygen -s /etc/ssh/ca_key -V +52w -n ${USER} -I ${USER}-key1 -z 1 ${USER}.pub
     
 EXPOSE 2223
 

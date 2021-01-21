@@ -41,16 +41,6 @@ WORKDIR /bastion_ssh
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} ${USER} \
     && echo "${USER}:${PASSWORD}" | chpasswd  
-    # key pair for signing
-    #&& ssh-keygen -t ed25519 -f /etc/ssh/ca_key -C ca -N "" \ 
-    #&& cp /etc/ssh/ca_key.pub /bastion_ssh/ \
-    # create user cert
-    #&& ssh-keygen -t ed25519 -f /etc/ssh/${USER}-user -C ${USER} -N "" \
-    #&& ssh-keygen -s /etc/ssh/ca_key -V +30d -n ${USER} -I ${USER}-key1 -z 1 /etc/ssh/${USER}-user.pub \
-    # creating host certificate
-    #&& ssh-keygen -t ed25519 -f /etc/ssh/${USER}-node -C ${USER}-node -N "" \
-    #&& ssh-keygen -s /etc/ssh/ca_key -V +60d -h -n bastion,bastion.example.com,localhost -I bastion-node -z 1 /etc/ssh/${USER}-node.pub
-    #&& cp ${USER}-node-cert.pub /etc/ssh/
     
 EXPOSE 2222
 
