@@ -8,6 +8,7 @@ services:
       args: 
         - PASSWORD # So as to not hard-code any passwords, passing as a build-arg instead
     hostname: bastion-node
+    container_name: bastion
     ports: 
       - 2222:2222
     networks: 
@@ -20,6 +21,7 @@ services:
       args:
         - PASSWORD
     hostname: app-node
+    container_name: app
     expose:
       - 2223
     networks: 

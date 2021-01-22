@@ -8,16 +8,16 @@ cd /tmp/ssh_files/ || exit
 touch config
 
 echo "Copying certs down from the bastion node..."
-docker cp teleport-bastion-exercise_bastion-node_1:/etc/ssh/bastion-user-key /tmp/ssh_files/
-docker cp teleport-bastion-exercise_bastion-node_1:/etc/ssh/bastion-user-key-cert.pub /tmp/ssh_files/
+docker cp bastion:/etc/ssh/bastion-user-key /tmp/ssh_files/
+docker cp bastion:/etc/ssh/bastion-user-key-cert.pub /tmp/ssh_files/
 
 echo "Copying certs from app node..."
-docker cp teleport-bastion-exercise_app-node_1:/etc/ssh/app-user-key /tmp/ssh_files/
-docker cp teleport-bastion-exercise_app-node_1:/etc/ssh/app-user-key-cert.pub /tmp/ssh_files/
+docker cp app:/etc/ssh/app-user-key /tmp/ssh_files/
+docker cp app:/etc/ssh/app-user-key-cert.pub /tmp/ssh_files/
 
 echo "Copying CA pub keys down..."
-docker cp teleport-bastion-exercise_app-node_1:/etc/ssh/app_host_ca.pub /tmp/ssh_files/
-docker cp teleport-bastion-exercise_bastion-node_1:/etc/ssh/bastion_host_ca.pub /tmp/ssh_files/
+docker cp app:/etc/ssh/app_host_ca.pub /tmp/ssh_files/
+docker cp bastion:/etc/ssh/bastion_host_ca.pub /tmp/ssh_files/
 echo "adding ca.pub to your ssh_known_hosts..."
 echo "@cert-authority localhost $(cat /tmp/ssh_files/bastion_host_ca.pub)" >> ~/.ssh/known_hosts
 echo "@cert-authority app-node $(cat /tmp/ssh_files/app_host_ca.pub)" >> ~/.ssh/known_hosts

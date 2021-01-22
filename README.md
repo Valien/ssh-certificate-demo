@@ -45,7 +45,7 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
 
 1. Git clone this repo via HTTPS, SSH, or GH CLI.
 2. Open a terminal/shell and `cd` into the repository's main folder (`teleport-bastion-exercise` typically).
-3. Run `docker-compose build --build-arg=<PASSWORD>` - this will take a few minutes to build out the two containers. Use the `--build-arg` to input a user password at build time. It can be anything.
+3. Run `docker-compose build --build-arg=<PASSWORD>` - this will take a few minutes to build out the two containers. Use the `--build-arg` to input a user password at build time. It can be anything. The password is just for the `appuser` and `bastion` users when initially created. SSH doesn't like users with blank passwords in `/etc/shadow` (that I've found).
 
     **note:** With the recent changes to the public Docker hub, you might have to login with your Docker username/password in order to download upstream images for the build.
    
