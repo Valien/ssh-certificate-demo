@@ -44,7 +44,7 @@ WORKDIR /app_ssh
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} --disabled-password ${USER} \
     && echo "${USER}:${PASSWORD}" | chpasswd
-    
+
 EXPOSE 2223
 
 # Details on the flags used: https://explainshell.com/explain?cmd=sshd+-D+-e

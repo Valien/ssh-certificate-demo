@@ -12,7 +12,7 @@
 
 Port 2222
 #AddressFamily any
-ListenAddress 0.0.0.0
+#ListenAddress 0.0.0.0
 ListenAddress 127.0.0.1
 ListenAddress 172.21.10.10
 

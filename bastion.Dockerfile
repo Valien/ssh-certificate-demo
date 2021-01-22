@@ -40,8 +40,8 @@ WORKDIR /bastion_ssh
 
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} ${USER} \
-    && echo "${USER}:${PASSWORD}" | chpasswd  
-    
+    && echo "${USER}:${PASSWORD}" | chpasswd
+
 EXPOSE 2222
 
 # Details on the flags used: https://explainshell.com/explain?cmd=sshd+-D+-e
