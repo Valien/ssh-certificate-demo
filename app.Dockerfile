@@ -6,15 +6,11 @@ RUN mkdir -p /etc/skel
 COPY configs/user_logout_config /etc/skel/.cshrc
 COPY configs/user_logout_config /etc/skel/.profile
 COPY configs/app_motd /etc/motd
-# the below helps lock down the app-node by only allowing SSH from the bastion-node
-COPY configs/hosts.allow /etc
-COPY configs/hosts.deny /etc
-#COPY configs/app_issue /etc/issue
 
 RUN set -xe \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache openssh \
+    && apk add --no-cache openssh ufw iptables\
     && rm -rf /tmp/* /var/cache/apk/* \
     # host CA & user CA generation
     && ssh-keygen -t ed25519 -f /etc/ssh/app_host_ca -C app_host_ca \
@@ -41,11 +37,15 @@ ARG GID=1337
 
 WORKDIR /app_ssh
 
+COPY configs/app_startup.sh app_startup.sh
+
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} --disabled-password ${USER} \
-    && echo "${USER}:${PASSWORD}" | chpasswd
+    && echo "${USER}:${PASSWORD}" | chpasswd \
+    && chmod +x app_startup.sh
 
 EXPOSE 2223
 
 # Details on the flags used: https://explainshell.com/explain?cmd=sshd+-D+-e
-CMD ["/usr/sbin/sshd","-D", "-e"]
+# The startup script runs the UFW rules and then starts SSHD
+CMD ./app_startup.sh

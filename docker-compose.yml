@@ -24,9 +24,12 @@ services:
     container_name: app
     expose:
       - 2223
+    cap_add: 
+      - NET_ADMIN
     networks: 
       public:
         ipv4_address: 172.21.10.11 # setting static IP to simplify the POC
+    #command: sh -c echo "hello" #sh -c "/usr/local/bin/init.sh && exec myexecutable"
 networks: 
   public:
     driver: bridge

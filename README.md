@@ -27,8 +27,7 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
     * `bastion.motd` - Simple MOTD file for bastion node (not really used as users cannot SSH into the bastion node)
     * `app_sshd_config` - SSHD configuration file for app node
     * `bastion_sshd_config` - SSHD configuration file for bastion node
-    * `hosts.allow` - Only allow certain hosts to SSH to app node
-    * `hosts.deny` - Deny file for app node
+    * `app_startup.sh` - This sets and starts the UFW firewall rules and then the SSHD service.
     * `sshd_config` - Default SSHD config (not used)
     * `user_cshrc_config` - Default shell settings
     * `user_logout_config` - Default `.profile` settings
