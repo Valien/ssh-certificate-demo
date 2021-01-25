@@ -44,13 +44,13 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
 
 1. Git clone this repo via HTTPS, SSH, or GH CLI.
 2. Open a terminal/shell and `cd` into the repository's main folder (`teleport-bastion-exercise` typically).
-3. Run `docker-compose build --build-arg=<PASSWORD>` - this will take a few minutes to build out the two containers. Use the `--build-arg` to input a user password at build time. It can be anything. The password is just for the `appuser` and `bastion` users when initially created. SSH doesn't like users with blank passwords in `/etc/shadow` (that I've found).
+3. Run `docker-compose build --build-arg PASSWORD=<PASSWORD>` - this will take a few minutes to build out the two containers. Use the `--build-arg` to input a user password at build time. It can be anything. The password is just for the `appuser` and `bastion` users when initially created. SSH doesn't like users with blank passwords in `/etc/shadow` (that I've found).
 
     **note:** With the recent changes to the public Docker hub, you might have to login with your Docker username/password in order to download upstream images for the build.
    
 4. Run `docker-compose up -d` to start the containers once the build completes. The `-d` flag detaches and runs the containers in the background. You can run a `docker ps` or `docker-compose ps` to see the status of the running containers.
 5. Run `chmod +x copy_keys.sh` to make the shell script executable (needed for next step).
-6. Run `./copy_keys.sh`. This bash script will copy the certs, pub keys, set up a custom config file, and modify your `~/.ssh/known_hosts` file. Dig into the script for details on what it does if you are curious. The files will be added to your `/tmp/ssh_files` folder.
+6. Run `./copy_keys.sh`. This bash script will copy the certs, pub keys, set up a custom config file, and modify your `~/.ssh/known_hosts` file. **Note:** if you are `root` you might have to manually create the `/root/.ssh/` directory so that the script can write out the `config` file. Dig into the script for details on what it does if you are curious. The files will be added to your `/tmp/ssh_files` folder. There is no error checking in the bash script for this demo. In a production environment you would want your bash script to be a little more robust.
 7. Run `ssh -F /tmp/ssh_files/config app-node`. After a few seconds your terminal should drop into the `app_node`. You can also run `ssh -F /tmp/ssh_files/config -J bastion-node app-node` as another option. What this command does is leverage your `config` file to ProxyJump from the `bastion-node` to the `app-node`. If you want to see some verbose logging you can put in the `-vv` flag in the ssh command.
 9. Congrats! You have successfully connected to a docker container via a bastion host leveraging SSH certificates!
 10. Type in `exit` to disconnect and `docker-compose down` to stop the running containers.

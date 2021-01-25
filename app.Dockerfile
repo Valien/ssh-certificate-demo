@@ -20,7 +20,9 @@ RUN set -xe \
     && ssh-keygen -s /etc/ssh/app_host_ca -I app.example.com -h -n app.example.com,localhost,app,app-node -V +60d /etc/ssh/ssh_host_ed25519_key.pub \
     # gen user key and sign it - will generate a user-key-cert.pub file
     && ssh-keygen -t ed25519 -f /etc/ssh/app-user-key \
-    && ssh-keygen -s /etc/ssh/app_user_ca -I app -n appuser,bastion -V +30d /etc/ssh/app-user-key.pub
+    && ssh-keygen -s /etc/ssh/app_user_ca -I app -n appuser,bastion -V +30d /etc/ssh/app-user-key.pub \
+    # disable ip6tables as it causes issues in docker
+    && sed -i "s/IPV6=yes/IPV6=no/g" /etc/default/ufw
 
 # copying over customized sshd_config on build
 COPY configs/app_sshd_config /etc/ssh/sshd_config
