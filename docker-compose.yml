@@ -1,8 +1,38 @@
 version: '3.4'
 
 services:
-  teleportbastionexercise:
-    image: teleportbastionexercise
+  bastion-node:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./bastion.Dockerfile
+      args: 
+        - PASSWORD # So as to not hard-code any passwords, passing as a build-arg instead
+    hostname: bastion-node
+    container_name: bastion
+    ports: 
+      - 2222:2222
+    networks: 
+      public:
+        ipv4_address: 172.21.10.10 # setting static IP to simplify the POC
+  app-node:
+    build:
+      context: .
+      dockerfile: ./app.Dockerfile
+      args:
+        - PASSWORD
+    hostname: app-node
+    container_name: app
+    expose:
+      - 2223
+    cap_add: 
+      - NET_ADMIN
+    networks: 
+      public:
+        ipv4_address: 172.21.10.11 # setting static IP to simplify the POC
+networks: 
+  public:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.10.0/24
