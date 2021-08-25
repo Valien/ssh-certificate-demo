@@ -57,6 +57,11 @@ Contact Allen Vailliencourt ~ <allenv@goteleport.com> ~ for any questions/commen
 8. Congrats! You have successfully connected to a docker container via a bastion host leveraging SSH certificates!
 9. Type in `exit` to disconnect and `docker-compose down` to stop the running containers.
 
+
+- Additional info:
+    
+    - View the certificate(s): `ssh-keygen -L -f /tmp/ssh_files/app-user-key-cert.pub` (replace the app with the `bastion` to see that certificate)
+
 ### Tested On
 
 * OSX - Big Sur, 11.5.2 - docker version 20.10.7 (August 2021)
