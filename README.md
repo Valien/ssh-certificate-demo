@@ -1,12 +1,14 @@
-# Teleport ~ Bastion Exercise
+# SSH Demo with Certificates
 
 ## Introduction
 
-Welcome to the Teleport Bastion Exercise. The purpose of this repository is to allow a user to access an isolated node using a bastion or proxy host.
+Welcome to the SSH Demo with Certificates repo! The purpose of this repository is to allow a user to access an isolated node using a bastion or proxy host.
 
 We will be leveraging Docker containers for both the proxy and application nodes.
 
-Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
+Instead of using SSH Keys for accessing the application node we will generate a short-lived SSH certificate and use that to access the node! How cool is that?
+
+Contact Allen Vailliencourt ~ <allenv@goteleport.com> ~ for any questions/comments or feel free to open up an issue here on GitHub!
 
 ***
 
@@ -40,7 +42,7 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
 * `README.md` - What you're reading now! :)
 * `.dockerignore` & `.gitignore` - Standard ignore files
 
-### Running the Bastion Exercise
+### Running the Demo
 
 1. Git clone this repo via HTTPS, SSH, or GH CLI.
 2. Open a terminal/shell and `cd` into the repository's main folder (`teleport-bastion-exercise` typically).
@@ -52,14 +54,16 @@ Contact Allen Vailliencourt <allenv@outlook.com> for any questions/comments.
 5. Run `chmod +x copy_keys.sh` to make the shell script executable (needed for next step).
 6. Run `./copy_keys.sh`. This bash script will copy the certs, pub keys, set up a custom config file, and modify your `~/.ssh/known_hosts` file. **Note:** if you are `root` you might have to manually create the `/root/.ssh/` directory so that the script can write out the `config` file. Dig into the script for details on what it does if you are curious. The files will be added to your `/tmp/ssh_files` folder. There is no error checking in the bash script for this demo. In a production environment you would want your bash script to be a little more robust.
 7. Run `ssh -F /tmp/ssh_files/config app-node`. After a few seconds your terminal should drop into the `app_node`. You can also run `ssh -F /tmp/ssh_files/config -J bastion-node app-node` as another option. What this command does is leverage your `config` file to ProxyJump from the `bastion-node` to the `app-node`. If you want to see some verbose logging you can put in the `-vv` flag in the ssh command.
-9. Congrats! You have successfully connected to a docker container via a bastion host leveraging SSH certificates!
-10. Type in `exit` to disconnect and `docker-compose down` to stop the running containers.
+8. Congrats! You have successfully connected to a docker container via a bastion host leveraging SSH certificates!
+9. Type in `exit` to disconnect and `docker-compose down` to stop the running containers.
 
 ### Tested On
 
-* OSX - Catalina, 10.15.7 - docker version 19.03.13
-* Vagrant - Ubuntu 20.04 - docker verion 20.10.2
+* OSX - Big Sur, 11.5.2 - docker version 20.10.7 (August 2021)
+* Vagrant - Ubuntu 20.04 - docker verion 20.10.2 (January/February 2021)
 
 ### Credits
 
 * Much of the inspiration came from multiple open-source repositories, blog posts, and gists of various ways of tackling this project. Google & StackOverflow are your friends. :)
+* Want to see more SSH cert awesomeness? Check out [Teleport](https://github.com/gravitational/teleport)!
+* Or our main site www.goteleport.com
