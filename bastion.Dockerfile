@@ -1,6 +1,6 @@
 FROM alpine:3.13 AS builder
 
-LABEL Name=dockerbastion Version=0.1.0 Maintainer="Allen Vailliencourt <allenv@outlook.com>"
+LABEL Name=dockerbastion Version=0.1.0 Maintainer="Allen Vailliencourt <allenv@goteleport.com>"
 
 RUN mkdir -p /etc/skel
 COPY configs/user_logout_config /etc/skel/.cshrc
@@ -18,10 +18,10 @@ RUN set -xe \
     && ssh-keygen -t ed25519 -f /etc/ssh/bastion_user_ca -C bastion_user_ca \
     # gen host key and cert- will generate a ssh_host_ed25519_key-cert.pub file
     && ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N '' \
-    && ssh-keygen -s /etc/ssh/bastion_host_ca -I bastion.example.com -h -n bastion.example.com,localhost,bastion -V +60d /etc/ssh/ssh_host_ed25519_key.pub \
+    && ssh-keygen -s /etc/ssh/bastion_host_ca -I bastion.example.com -h -n bastion.example.com,localhost,bastion -V +2h /etc/ssh/ssh_host_ed25519_key.pub \
     # gen user key and sign it - will generate a user-key-cert.pub file
     && ssh-keygen -t ed25519 -f /etc/ssh/bastion-user-key \
-    && ssh-keygen -s /etc/ssh/bastion_user_ca -I bastion -n bastion -V +30d /etc/ssh/bastion-user-key.pub
+    && ssh-keygen -s /etc/ssh/bastion_user_ca -I bastion -n bastion -V +30m /etc/ssh/bastion-user-key.pub
     
 # copying over customized sshd_config on build
 COPY configs/bastion_sshd_config /etc/ssh/sshd_config
