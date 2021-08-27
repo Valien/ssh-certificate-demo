@@ -10,7 +10,7 @@ COPY configs/app_motd /etc/motd
 RUN set -xe \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache openssh ufw iptables\
+    && apk add --no-cache openssh ufw iptables \
     && rm -rf /tmp/* /var/cache/apk/* \
     # host CA & user CA generation
     && ssh-keygen -t ed25519 -f /etc/ssh/app_host_ca -C app_host_ca \
@@ -23,7 +23,7 @@ RUN set -xe \
     && ssh-keygen -s /etc/ssh/app_user_ca -I app -n appuser,bastion -V +30m /etc/ssh/app-user-key.pub \
     # disable ip6tables as it causes issues in docker
     && sed -i "s/IPV6=yes/IPV6=no/g" /etc/default/ufw
-
+    
 # copying over customized sshd_config on build
 COPY configs/app_sshd_config /etc/ssh/sshd_config
 
