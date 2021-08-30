@@ -61,6 +61,7 @@ Contact Allen Vailliencourt ~ <allenv@goteleport.com> ~ for any questions/commen
 - Additional info:
     
     - View the certificate(s): `ssh-keygen -L -f /tmp/ssh_files/app-user-key-cert.pub` (replace the app with the `bastion` to see that certificate)
+    - Verify that a cert is being used to authenticate: `ssh -F config app-node -vv 2>&1 | grep certificate`
 
 ### Tested On
 
