@@ -1,6 +1,6 @@
 FROM alpine:3.13 AS builder
 
-LABEL Name=dockerbastion Version=0.1.0 Maintainer="Allen Vailliencourt <allenv@outlook.com>"
+LABEL Name=dockerbastion Version=0.1.0 Maintainer="Allen Vailliencourt <allenv@goteleport.com>"
 
 RUN mkdir -p /etc/skel
 COPY configs/user_logout_config /etc/skel/.cshrc

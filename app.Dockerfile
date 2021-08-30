@@ -1,6 +1,6 @@
 FROM alpine:3.13 AS builder
 
-LABEL Name=app_node Version=0.1.0 Maintainer="Allen Vailliencourt <allenv@outlook.com>"
+LABEL Name=app_node Version=0.1.0 Maintainer="Allen Vailliencourt <allenv@goteleport.com>"
 
 RUN mkdir -p /etc/skel
 COPY configs/user_logout_config /etc/skel/.cshrc
@@ -10,7 +10,7 @@ COPY configs/app_motd /etc/motd
 RUN set -xe \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache openssh ufw iptables\
+    && apk add --no-cache openssh ufw iptables \
     && rm -rf /tmp/* /var/cache/apk/* \
     # host CA & user CA generation
     && ssh-keygen -t ed25519 -f /etc/ssh/app_host_ca -C app_host_ca \
