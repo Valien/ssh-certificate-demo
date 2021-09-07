@@ -10,7 +10,7 @@ COPY configs/app_motd /etc/motd
 RUN set -xe \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache openssh ufw iptables \
+    && apk add --no-cache openssh ufw iptables curl \
     && rm -rf /tmp/* /var/cache/apk/* \
     # host CA & user CA generation
     && ssh-keygen -t ed25519 -f /etc/ssh/app_host_ca -C app_host_ca \
@@ -44,7 +44,9 @@ COPY configs/app_startup.sh app_startup.sh
 RUN addgroup -S -g ${GID} ${GROUP} \
     && adduser -D -h ${HOME} -s ${SHELL} -u ${UID} -G ${GROUP} --disabled-password ${USER} \
     && echo "${USER}:${PASSWORD}" | chpasswd \
-    && chmod +x app_startup.sh
+    && chmod +x app_startup.sh \
+    && curl "https://raw.githubusercontent.com/Anupya/dadjoke-cli/master/dadjoke" -o /usr/local/bin/dadjoke \ 
+    && chmod +x /usr/local/bin/dadjoke
 
 EXPOSE 2223
 
