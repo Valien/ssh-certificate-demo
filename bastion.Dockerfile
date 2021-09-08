@@ -21,7 +21,7 @@ RUN set -xe \
     && ssh-keygen -s /etc/ssh/bastion_host_ca -I bastion.example.com -h -n bastion.example.com,localhost,bastion -V +2h /etc/ssh/ssh_host_ed25519_key.pub \
     # gen user key and sign it - will generate a user-key-cert.pub file
     && ssh-keygen -t ed25519 -f /etc/ssh/bastion-user-key \
-    && ssh-keygen -s /etc/ssh/bastion_user_ca -I bastion -n bastion -V +30m /etc/ssh/bastion-user-key.pub
+    && ssh-keygen -s /etc/ssh/bastion_user_ca -I bastion -n bastion -V +15m /etc/ssh/bastion-user-key.pub
     
 # copying over customized sshd_config on build
 COPY configs/bastion_sshd_config /etc/ssh/sshd_config
